@@ -164,6 +164,25 @@ function setupVolumeControls() {
     syncVolumeUI();
 }
 
+document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+        if (gainNode) {
+            gainNode.gain.value = 0;
+        }
+        audio.muted = true;
+        audio.pause();
+    } else {
+        if (gainNode) {
+            gainNode.gain.value = currentVolume;
+        }
+        audio.muted = currentVolume === 0;
+        
+        if (isPlaying) {
+            audio.play().catch(e => console.error("Resume playback error:", e));
+        }
+    }
+});
+
 document.addEventListener('DOMContentLoaded', () => {
     shuffledSongs = shuffleArray([...songs]);
     initMusicPlayer();
