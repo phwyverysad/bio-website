@@ -8,8 +8,34 @@ let currentSongIndex = 0;
 let isPlaying = false;
 const audio = new Audio();
 let lastVolume = 0.5;
+let currentVolume = lastVolume;
 
 audio.volume = lastVolume;
+
+window.MusicPlayer = window.MusicPlayer || {};
+
+let audioCtx, gainNode, analyser, sourceNode;
+
+function initAudioContext() {
+    if (audioCtx) return;
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return;
+    
+    audioCtx = new AudioContext();
+    gainNode = audioCtx.createGain();
+    analyser = audioCtx.createAnalyser();
+    
+    sourceNode = audioCtx.createMediaElementSource(audio);
+    sourceNode.connect(gainNode);
+    gainNode.connect(analyser);
+    analyser.connect(audioCtx.destination);
+    
+    gainNode.gain.value = currentVolume;
+    
+    window.MusicPlayer.audioCtx = audioCtx;
+    window.MusicPlayer.analyser = analyser;
+    window.MusicPlayer.gainNode = gainNode;
+}
 
 function shuffleArray(array) {
     const newArray = [...array];
@@ -28,6 +54,10 @@ function initMusicPlayer() {
 }
 
 function startMusicAfterTerminal() {
+    initAudioContext();
+    if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
     isPlaying = true;
     audio.play()
         .catch(error => {
@@ -66,18 +96,34 @@ function setupVolumeControls() {
     }
 
     function syncVolumeUI() {
-        const isMuted = audio.muted || audio.volume === 0;
-        const sliderValue = Math.round((isMuted ? 0 : audio.volume) * 100);
+        const isMuted = currentVolume === 0;
+        const sliderValue = Math.round((isMuted ? 0 : currentVolume) * 100);
 
         volumeSlider.value = sliderValue;
         musicControls.style.setProperty('--volume-percent', `${sliderValue}%`);
-        muteButton.classList.toggle('is-muted', isMuted);
+        
+        const icon = muteButton.querySelector('i');
+        if (icon) {
+            if (isMuted || sliderValue === 0) {
+                icon.className = 'fa-solid fa-volume-xmark';
+            } else if (sliderValue <= 50) {
+                icon.className = 'fa-solid fa-volume-low';
+            } else {
+                icon.className = 'fa-solid fa-volume-high';
+            }
+        }
     }
 
     function setVolume(nextVolume) {
         const safeVolume = clamp(nextVolume, 0, 1);
+        currentVolume = safeVolume;
+        
         audio.volume = safeVolume;
         audio.muted = safeVolume === 0;
+
+        if (gainNode) {
+            gainNode.gain.value = safeVolume;
+        }
 
         if (safeVolume > 0) {
             lastVolume = safeVolume;
@@ -95,23 +141,21 @@ function setupVolumeControls() {
             const action = button.dataset.volumeAction;
 
             if (action === 'increase') {
-                setVolume((audio.muted ? lastVolume : audio.volume) + 0.1);
+                setVolume((currentVolume === 0 ? lastVolume : currentVolume) + 0.1);
                 return;
             }
 
             if (action === 'decrease') {
-                setVolume((audio.muted ? lastVolume : audio.volume) - 0.1);
+                setVolume((currentVolume === 0 ? lastVolume : currentVolume) - 0.1);
                 return;
             }
 
             if (action === 'mute') {
-                if (audio.muted || audio.volume === 0) {
-                    audio.muted = false;
+                if (currentVolume === 0) {
                     setVolume(lastVolume || 0.5);
                 } else {
-                    lastVolume = audio.volume || lastVolume;
-                    audio.muted = true;
-                    syncVolumeUI();
+                    lastVolume = currentVolume;
+                    setVolume(0);
                 }
             }
         });
@@ -126,7 +170,5 @@ document.addEventListener('DOMContentLoaded', () => {
     setupVolumeControls();
 });
 
-window.MusicPlayer = {
-    start: startMusicAfterTerminal,
-    getAudio: () => audio
-};
+window.MusicPlayer.start = startMusicAfterTerminal;
+window.MusicPlayer.getAudio = () => audio;
