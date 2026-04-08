@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title></title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="icon" type="image/x-icon" href="./assets/favico/default.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.2/dist/vanilla-tilt.min.js"></script>
+  <link rel="stylesheet" href="./assets/css/tilt-effect.css">
+</head>
+
+<body>
+  <div id="terminal">
+    <div id="terminal-header">
+      <div id="terminal-buttons">
+        <div class="terminal-button" id="close-button"></div>
+        <div class="terminal-button" id="minimize-button"></div>
+        <div class="terminal-button" id="maximize-button"></div>
+      </div>
+    </div>
+    <div id="terminal-content">
+      <p id="terminal-text"></p>
+    </div>
+  </div>
+
+  <div id="video-background">
+    <video autoplay muted loop id="myVideo">
+      <source src="./assets/back/default.mp4" type="video/mp4">
+      Your browser does not support HTML5 video.
+    </video>
+
+    <div id="audio-background">
+      <div id="music-controls">
+        <button type="button" class="volume-button" data-volume-action="decrease" aria-label="Decrease volume">
+          <i class="fa-solid fa-minus"></i>
+        </button>
+        <button type="button" class="volume-button volume-button-mute" data-volume-action="mute" aria-label="Mute or unmute audio">
+          <i class="fa-solid fa-volume-xmark"></i>
+        </button>
+        <button type="button" class="volume-button" data-volume-action="increase" aria-label="Increase volume">
+          <i class="fa-solid fa-plus"></i>
+        </button>
+        <input type="range" id="volume-slider" min="0" max="100" value="50">
+      </div>
+    </div>
+
+    </div>
+    <div id="video-overlay"></div>
+    <div id="blurred-box" class="tilt-element">
+      <img id="profile-picture" src="./assets/pfp/default.png" alt="Profile Picture">
+      <img id="avatar-frame" src="" alt="Avatar Frame">
+      <p id="username-container" style="color: white; font-weight: bold; font-size: 32px;">
+        <span id="username">c0mplex</span>
+        <span id="typing-cursor">|</span>
+      </p>
+      <div class="badges-container">
+        <img src="./assets/badge/developer.png" alt="dev badge">
+        <img src="./assets/badge/love.png" alt="heart badge">
+        <img src="./assets/badge/music.png" alt="music badge">
+        <img src="./assets/badge/verified.png" alt="verified badge">
+      </div>
+      <div class="featured-links" aria-label="Featured websites">
+        <a class="glass-link" href="https://combinepowershell.vercel.app" target="_blank" rel="noopener noreferrer">
+          <span class="glass-link-copy">
+            <span class="glass-link-title">Combine - PowerShell - Scripts</span>
+            <span class="glass-link-preview">combinepowershell.vercel.app</span>
+          </span>
+        </a>
+        <a class="glass-link" href="https://short-link-woad.vercel.app" target="_blank" rel="noopener noreferrer">
+          <span class="glass-link-copy">
+            <span class="glass-link-title">ย่อลิ้งก์ให้สั้น - Short Link</span>
+            <span class="glass-link-preview">short-link-woad.vercel.app</span>
+          </span>
+        </a>
+        <a class="glass-link" href="https://microsoft-365-alpha.vercel.app" target="_blank" rel="noopener noreferrer">
+          <span class="glass-link-copy">
+            <span class="glass-link-title">Microsoft 365 - Retail Hub</span>
+            <span class="glass-link-preview">microsoft-365-alpha.vercel.app</span>
+          </span>
+        </a>
+        <a class="glass-link" href="https://uploadshare-two.vercel.app" target="_blank" rel="noopener noreferrer">
+          <span class="glass-link-copy">
+            <span class="glass-link-title">Gofile - ฝากไฟล์ &amp; แชร์ด้วยคิวอาร์โค้ด</span>
+            <span class="glass-link-preview">uploadshare-two.vercel.app</span>
+          </span>
+        </a>
+        <a class="glass-link" href="https://emuarchive.vercel.app" target="_blank" rel="noopener noreferrer">
+          <span class="glass-link-copy">
+            <span class="glass-link-title">EmuArchive - App Player Download</span>
+            <span class="glass-link-preview">emuarchive.vercel.app</span>
+          </span>
+        </a>
+      </div>
+      <div class="lang-container">
+        <img src="./assets/logo/html.png" alt="html">
+        <img src="./assets/logo/css.png" alt="css">
+        <img src="./assets/logo/java-script.png" alt="java-script">
+        <img src="./assets/logo/python.png" alt="python">
+        <img src="./assets/logo/c++.png" alt="c++">
+        <img src="./assets/logo/php.png" alt="php">
+      </div>
+
+      <div class="links">
+        <a class="social-link" href="https://www.instagram.com/phwyverysad" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a class="social-link" href="https://github.com/phwyverysad" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+          <i class="fa-brands fa-github"></i>
+        </a>
+        <a class="social-link roblox-link" href="https://www.roblox.com/th/users/3221254128/profile" target="_blank" rel="noopener noreferrer" aria-label="Roblox">
+          <span class="roblox-mark" aria-hidden="true"></span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script src="./assets/js/lanyard.js"></script>
+  <script src="./assets/js/discord.js"></script>
+  <script src="./assets/js/script.js"></script>
+  <script src="./assets/js/title.js"></script>
+  <script src="./assets/js/username-animation.js"></script>
+  <script src="./assets/js/tilt-effect.js"></script>
+  <script src="./assets/js/audio-visualizer.js"></script>
+  <script src="./assets/js/neko.js"></script>
+  <script src="./assets/js/neko-init.js"></script>
+  <script src="./assets/js/music.js"></script>
+</body>
+</html>
